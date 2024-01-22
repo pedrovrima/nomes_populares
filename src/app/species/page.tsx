@@ -1,3 +1,5 @@
+"use client";
+
 import { api } from "@/trpc/server";
 import Link from "next/link";
 import { Box, Center, Text } from "@mantine/core";

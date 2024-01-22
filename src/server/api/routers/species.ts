@@ -78,16 +78,16 @@ export const speciesRouter = createTRPCRouter({
           if (acc.id === cur.species.id && cur?.popular) {
             acc.popular?.push(cur?.popular);
           } else {
-            const pop = cur?.popular || null;
+            const pop = cur?.popular ?? null;
             acc = {
               ...cur.species,
               popular: [
                 {
-                  id: pop?.id || null,
-                  name: pop?.name || null,
-                  region: pop?.region || null,
-                  sourceName: pop?.sourceName || null,
-                  collector: pop?.collector || null,
+                  id: pop?.id ?? null,
+                  name: pop?.name ?? null,
+                  region: pop?.region ?? null,
+                  sourceName: pop?.sourceName ?? null,
+                  collector: pop?.collector ?? null,
                 },
               ],
             };

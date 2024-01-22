@@ -1,6 +1,9 @@
 import "@/styles/globals.css";
 
 import { Inter } from "next/font/google";
+import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+
+import "@mantine/core/styles.css";
 
 import { TRPCReactProvider } from "@/trpc/react";
 
@@ -22,8 +25,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <ColorSchemeScript />
+      </head>
       <body className={`font-sans ${inter.variable}`}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <MantineProvider>{children}</MantineProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );

@@ -1,34 +1,34 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
-
-import { sql } from "drizzle-orm";
 import {
-  bigint,
-  index,
-  mysqlTableCreator,
-  timestamp,
+  pgTable,
+  serial,
+  text,
   varchar,
-} from "drizzle-orm/mysql-core";
+  timestamp,
+  numeric,
+  integer,
+} from "drizzle-orm/pg-core";
+import { InferInsertModel, InferSelectModel, sql } from "drizzle-orm";
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-export const mysqlTable = mysqlTableCreator((name) => `populares_${name}`);
+export const species = pgTable("species", {
+  id: serial("id").primaryKey(),
+  scientificName: text("scientific_name"),
+  brName: text("brName"),
+  enName: text("enName"),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
 
-export const posts = mysqlTable(
-  "post",
-  {
-    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt").onUpdateNow(),
-  },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
-);
+export const popular = pgTable("popular", {
+  id: serial("id").primaryKey(),
+  name: text("name"),
+  region: text("region"),
+  sourceName: text("source_name"),
+  collector: text("collector"),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  speciesId: integer("species_id").references(() => species.id),
+});
+
+export type Popular = InferInsertModel<typeof popular>;

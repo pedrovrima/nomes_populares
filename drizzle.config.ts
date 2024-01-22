@@ -2,11 +2,12 @@ import { type Config } from "drizzle-kit";
 
 import { env } from "@/env";
 
+console.log(env);
 export default {
   schema: "./src/server/db/schema.ts",
-  driver: "mysql2",
+  driver: "pg",
+  out: "./src/server/db/migrations",
   dbCredentials: {
-    uri: env.DATABASE_URL,
+    connectionString: env.CONECTION_STRING,
   },
-  tablesFilter: ["populares_*"],
 } satisfies Config;

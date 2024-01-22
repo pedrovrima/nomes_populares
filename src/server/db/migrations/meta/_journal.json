@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1705711190098,
+      "tag": "0000_parallel_venus",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1705712237003,
+      "tag": "0001_loud_captain_america",
+      "breakpoints": true
+    }
+  ]
+}

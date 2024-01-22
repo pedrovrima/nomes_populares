@@ -1,43 +1,73 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
+import { TextInput, Checkbox, Button, Group, Box } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Popular } from "@/server/db/schema";
 import { api } from "@/trpc/react";
+import SpeciesCombox from "./species-combobx";
 
 export function CreatePost() {
-  const router = useRouter();
-  const [name, setName] = useState("");
+  const formValues = {
+    name: "",
+    collector: "",
+    region: "",
+    sourceName: "",
+    speciesId: 0,
+  };
+  const form = useForm({
+    name: "test",
+    initialValues: formValues,
+  });
 
-  const createPost = api.post.create.useMutation({
+  const createPopular = api.popular.create.useMutation({
     onSuccess: () => {
-      router.refresh();
-      setName("");
+      form.reset();
     },
   });
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        createPost.mutate({ name });
-      }}
-      className="flex flex-col gap-2"
-    >
-      <input
-        type="text"
-        placeholder="Title"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full rounded-full px-4 py-2 text-black"
-      />
-      <button
-        type="submit"
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createPost.isLoading}
+    <Box maw={340} mx="auto">
+      <form
+        onSubmit={form.onSubmit((values) => {
+          createPopular.mutate(values);
+          console.log(values);
+        })}
       >
-        {createPost.isLoading ? "Submitting..." : "Submit"}
-      </button>
-    </form>
+        <TextInput
+          withAsterisk
+          label="Nome Popular"
+          placeholder=""
+          {...form.getInputProps("name")}
+        />
+
+        <TextInput
+          withAsterisk
+          label="Nome da Fonte"
+          placeholder=""
+          {...form.getInputProps("sourceName")}
+        />
+
+        <TextInput
+          withAsterisk
+          label="Coletor"
+          placeholder=""
+          {...form.getInputProps("collector")}
+        />
+
+        <TextInput
+          withAsterisk
+          label="Região"
+          placeholder=""
+          {...form.getInputProps("region")}
+        />
+
+        <SpeciesCombox setFieldValue={form.setFieldValue} />
+        <Group justify="flex-end" mt="md">
+          <Button type="submit">Submit</Button>
+        </Group>
+      </form>
+    </Box>
   );
 }

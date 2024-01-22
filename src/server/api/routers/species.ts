@@ -5,13 +5,21 @@ import { popular, species } from "@/server/db/schema";
 import { Column, eq, ilike, or, sql } from "drizzle-orm";
 import { PgColumn } from "drizzle-orm/pg-core";
 
+interface PopularReturn {
+  id: number | null;
+  name: string | null;
+  region: string | null;
+  sourceName: string | null;
+  collector: string | null;
+}
+
 interface SpeciesReturn {
   id: number;
   scientificName: string | null;
   brName: string | null;
   enName: string | null;
   createdAt: Date | null;
-  popular: any[] | null;
+  popular: PopularReturn[] | null;
 }
 
 export const speciesRouter = createTRPCRouter({
@@ -67,10 +75,22 @@ export const speciesRouter = createTRPCRouter({
 
       const at = data.reduce(
         (acc: SpeciesReturn, cur) => {
-          if (acc.id === cur.species.id) {
-            acc.popular?.push(cur.popular);
+          if (acc.id === cur.species.id && cur?.popular) {
+            acc.popular?.push(cur?.popular);
           } else {
-            acc = { ...cur.species, popular: [cur.popular] };
+            const pop = cur?.popular || null;
+            acc = {
+              ...cur.species,
+              popular: [
+                {
+                  id: pop?.id || null,
+                  name: pop?.name || null,
+                  region: pop?.region || null,
+                  sourceName: pop?.sourceName || null,
+                  collector: pop?.collector || null,
+                },
+              ],
+            };
           }
           return acc;
         },
@@ -80,9 +100,7 @@ export const speciesRouter = createTRPCRouter({
           brName: "",
           enName: "",
           createdAt: new Date(),
-          popular: [
-            { id: 0, name: "", region: "", sourceName: "", collector: "" },
-          ],
+          popular: [],
         },
       );
       console.log(at);

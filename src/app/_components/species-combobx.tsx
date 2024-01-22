@@ -10,7 +10,13 @@ import {
 } from "@mantine/core";
 import { api } from "@/trpc/react";
 
-function SpeciesCombox(props: any) {
+interface initialValues {
+  speciesId: number;
+}
+
+function SpeciesCombox(
+  props: TextInputProps & { initialValue: initialValues },
+) {
   const { initialValue } = props;
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -20,18 +26,18 @@ function SpeciesCombox(props: any) {
   const formActions = createFormActions("test");
   const [search, setSearch] = useState(
     speciesQuery.data?.find((item) => item.id === initialValue.speciesId)
-      ?.scientificName || "",
+      ?.scientificName ?? "",
   );
 
   useEffect(() => {
     setSearch(
       speciesQuery.data?.find((item) => item.id === initialValue.speciesId)
-        ?.scientificName || "",
+        ?.scientificName ?? "",
     );
   }, [speciesQuery]);
 
   console.log(search, initialValue, "a");
-  const groceries = speciesQuery.data?.map((item) => item.scientificName) || [];
+  const groceries = speciesQuery.data?.map((item) => item.scientificName) ?? [];
 
   const shouldFilterOptions = groceries.every((item) => item !== search);
   const filteredOptions = shouldFilterOptions
@@ -41,7 +47,7 @@ function SpeciesCombox(props: any) {
     : groceries;
 
   const options = filteredOptions.map((item) => (
-    <Combobox.Option value={item || ""} key={item}>
+    <Combobox.Option value={item ?? ""} key={item}>
       {item}
     </Combobox.Option>
   ));

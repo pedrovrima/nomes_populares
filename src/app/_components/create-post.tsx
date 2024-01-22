@@ -22,7 +22,7 @@ export function CreatePost({ initialValue }: { initialValue?: Popular }) {
     collector: "",
     region: "",
     sourceName: "",
-    speciesId: initialValue?.speciesId || 0,
+    speciesId: initialValue?.speciesId ?? 0,
   };
   const form = useForm<FormValues>({
     name: "test",
@@ -64,8 +64,8 @@ export function CreatePost({ initialValue }: { initialValue?: Popular }) {
     <Box maw={340} mx="auto">
       <form
         onSubmit={form.onSubmit((values) => {
+          //eslint-disable-next-line
           createPopular.mutate(values);
-          form.setValues({ speciesId: 0 });
         })}
       >
         <TextInput

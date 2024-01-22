@@ -5,7 +5,7 @@ import { Box, Loader, NavLink, Text, TextInput } from "@mantine/core";
 import Link from "next/link";
 import { useState } from "react";
 
-export default () => {
+export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const data = api.species.searchString.useQuery(
     { searchString: searchTerm },
@@ -31,4 +31,4 @@ export default () => {
       ))}
     </Box>
   );
-};
+}

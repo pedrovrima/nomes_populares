@@ -1,16 +1,16 @@
 "use client";
 
-import { api } from "@/trpc/server";
+import { api } from "@/trpc/react";
 import Link from "next/link";
 import { Box, Center, Text } from "@mantine/core";
 
 export default async function Home() {
-  const species = await api.species.getAll.query();
+  const species = api.species.getAll.useQuery();
   return (
     <Box mt={"lg"} h={"full"}>
       <Center>
         <ul>
-          {species?.map((item) => (
+          {species?.data?.map((item) => (
             <li key={item.id}>
               <Link href={`/species/${item.id}`}>
                 <Text td="underline">{item.scientificName}</Text>

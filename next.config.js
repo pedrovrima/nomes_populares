@@ -1,11 +1,4 @@
-/**
- * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
- * for Docker builds.
- */
-await import("./src/env.js");
-
-/** @type {import("next").NextConfig} */
-const config = {
+module.exports = {
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -14,5 +7,3 @@ const config = {
     ignoreBuildErrors: true,
   },
 };
-
-export default config;

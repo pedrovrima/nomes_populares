@@ -6,7 +6,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Page() {
   const searchParams = useSearchParams();
-  console.log(searchParams);
+
+  const _speciesId = searchParams.get("speciesId");
+  const speciesId = _speciesId ? parseInt(_speciesId) : 0;
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
@@ -15,7 +17,7 @@ export default function Page() {
           Adicionar Nomes Populares
         </h1>
 
-        <CreatePost initialValue={{ speciesId: 1 }} />
+        <CreatePost initialValue={{ speciesId }} />
       </div>
     </main>
   );

@@ -1,4 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
+import Link from "next/link";
+import Search from "./_components/search";
 
 export default async function Home() {
   noStore();
@@ -9,6 +11,10 @@ export default async function Home() {
         <h1 className="mb-12 text-2xl font-extrabold tracking-tight sm:text-[3rem]">
           Nomes Populares
         </h1>
+        <Search />
+
+        <Link href="/species">Espécies</Link>
+        <Link href="/new">Adicionar Nome Popular</Link>
       </div>
     </main>
   );

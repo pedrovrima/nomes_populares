@@ -1,7 +1,7 @@
 "use client";
 
 import { createFormActions } from "@mantine/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   InputBase,
   Combobox,
@@ -19,11 +19,18 @@ function SpeciesCombox(props: any) {
   const speciesQuery = api.species.getAll.useQuery();
   const formActions = createFormActions("test");
   const [search, setSearch] = useState(
-    () =>
+    speciesQuery.data?.find((item) => item.id === initialValue.speciesId)
+      ?.scientificName || "",
+  );
+
+  useEffect(() => {
+    setSearch(
       speciesQuery.data?.find((item) => item.id === initialValue.speciesId)
         ?.scientificName || "",
-  );
-  console.log(search, initialValue);
+    );
+  }, [speciesQuery]);
+
+  console.log(search, initialValue, "a");
   const groceries = speciesQuery.data?.map((item) => item.scientificName) || [];
 
   const shouldFilterOptions = groceries.every((item) => item !== search);

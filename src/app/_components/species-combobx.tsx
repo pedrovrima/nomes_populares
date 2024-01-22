@@ -11,16 +11,19 @@ import {
 import { api } from "@/trpc/react";
 
 function SpeciesCombox(props: any) {
+  const { initialValue } = props;
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
-  const formActions = createFormActions("test");
-  const [value, setValue] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-
   const speciesQuery = api.species.getAll.useQuery();
-
+  const formActions = createFormActions("test");
+  const [search, setSearch] = useState(
+    () =>
+      speciesQuery.data?.find((item) => item.id === initialValue.speciesId)
+        ?.scientificName || "",
+  );
+  console.log(search, initialValue);
   const groceries = speciesQuery.data?.map((item) => item.scientificName) || [];
 
   const shouldFilterOptions = groceries.every((item) => item !== search);
@@ -40,7 +43,6 @@ function SpeciesCombox(props: any) {
     <Combobox
       store={combobox}
       onOptionSubmit={(val) => {
-        setValue(val);
         setSearch(val);
 
         const speciesId = speciesQuery.data?.find(

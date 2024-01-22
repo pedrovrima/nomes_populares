@@ -1,6 +1,7 @@
 import { api } from "@/trpc/server";
 import {
   Box,
+  Button,
   Center,
   Container,
   Flex,
@@ -9,6 +10,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import Link from "next/link";
 
 export default async function Page({
   params,
@@ -53,6 +55,14 @@ export default async function Page({
                 </ListItem>
               ))}
             </List>
+            <Link
+              href={{
+                pathname: `/new`,
+                query: { speciesId: speciesData.id },
+              }}
+            >
+              Adicionar Nome Popular
+            </Link>
           </Flex>
         </Container>
       )}

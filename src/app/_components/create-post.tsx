@@ -8,13 +8,15 @@ import { Popular } from "@/server/db/schema";
 import { api } from "@/trpc/react";
 import SpeciesCombox from "./species-combobx";
 
-export function CreatePost() {
+export function CreatePost({ initialValue }: { initialValue?: Popular }) {
+  console.log(initialValue);
   const formValues = {
     name: "",
     collector: "",
     region: "",
     sourceName: "",
     speciesId: 0,
+    ...initialValue,
   };
   const form = useForm({
     name: "test",
@@ -63,7 +65,10 @@ export function CreatePost() {
           {...form.getInputProps("region")}
         />
 
-        <SpeciesCombox setFieldValue={form.setFieldValue} />
+        <SpeciesCombox
+          initialValue={initialValue}
+          setFieldValue={form.setFieldValue}
+        />
         <Group justify="flex-end" mt="md">
           <Button type="submit">Submit</Button>
         </Group>

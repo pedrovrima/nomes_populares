@@ -1,8 +1,12 @@
+"use client";
+
 import { CreatePost } from "@/app/_components/create-post";
 import { api } from "@/trpc/server";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default async function Page() {
-  const hello = await api.popular.hello.query({ text: "from tRPC" });
+export default function Page() {
+  const searchParams = useSearchParams();
+  console.log(searchParams);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
@@ -11,7 +15,7 @@ export default async function Page() {
           Adicionar Nomes Populares
         </h1>
 
-        <CrudShowcase />
+        <CreatePost initialValue={{ speciesId: 1 }} />
       </div>
     </main>
   );
@@ -27,8 +31,6 @@ async function CrudShowcase() {
       {/* ) : ( */}
       {/* <p>You have no posts yet.</p> */}
       {/* )} */}
-
-      <CreatePost />
     </div>
   );
 }

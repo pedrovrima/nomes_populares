@@ -2,7 +2,8 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { popular, species } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+import { Column, eq, ilike, or, sql } from "drizzle-orm";
+import { PgColumn } from "drizzle-orm/pg-core";
 
 interface SpeciesReturn {
   id: number;
@@ -22,6 +23,35 @@ export const speciesRouter = createTRPCRouter({
       };
     }),
 
+  searchString: publicProcedure
+    .input(
+      z.object({
+        searchString: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { searchString } = input;
+      const data = await ctx.db
+        .selectDistinct({
+          id: species.id,
+          scientificName: species.scientificName,
+          brName: species.brName,
+          enName: species.enName,
+        })
+        .from(species)
+        .leftJoin(popular, eq(species.id, popular.speciesId))
+        .where(
+          or(
+            ilike(species.scientificName, `%${searchString}%`),
+            ilike(species.brName, `%${searchString}%`),
+            ilike(species.enName, `%${searchString}%`),
+            ilike(popular.name, `%${searchString}%`),
+          ),
+        );
+
+      console.log(data);
+      return data;
+    }),
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.select().from(species);
   }),

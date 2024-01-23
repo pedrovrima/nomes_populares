@@ -3,8 +3,17 @@
 import { CreatePost } from "@/app/_components/create-post";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 export default function Page() {
+  return (
+    <Suspense>
+      <Search />
+    </Suspense>
+  );
+}
+
+function Search() {
   const searchParams = useSearchParams();
 
   const _speciesId = searchParams.get("speciesId");
